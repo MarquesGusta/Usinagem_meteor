@@ -29,7 +29,7 @@ CREATE TABLE fornecedores(
     nome 				varchar(100) NOT NULL,
     numTelefone 		varchar(12) NOT NULL,
     cnpj 				char(14) NOT NULL,
-    avaliacao 			float NOT NULL
+    avaliacao 			decimal(1,1) NOT NULL
 );
 
 CREATE TABLE materiasPrimas(
@@ -45,15 +45,23 @@ CREATE TABLE inspecoes(
 	pk_idInspecao 		int PRIMARY KEY,
     fk_idPeca 			int NOT NULL,
     dataInspecao 		date NOT NULL,
-    resultado 			varchar(9) NOT NULL,  -- ver com o professor sobre colocar enum de aceito e rejeitado
-    observacoes 		varchar(500) NOT NULL
+    observacoes 		varchar(500) NOT NULL,
+    resultado			enum("Aceito", "Rejeitado")
+);
+
+CREATE TABLE clientes(
+	pk_idCliente 	int PRIMARY KEY,
+    fk_cep 			char(8) NOT NULL,
+    numEndereco		int NOT NULL,
+    nome 			varchar(120) NOT NULL,
+    numTelefone 	varchar(12) NOT NULL
 );
 
 CREATE TABLE aceitacoes(
 	pk_idAceitacao 		int PRIMARY KEY,
     fk_idPeca 			int NOT NULL,
+    fk_idCliente		int NOT NULL,
     dataAceitacao 		date NOT NULL,
-    destinoPeca 		varchar(50) NOT NULL,  -- ver com o professor se é melhor colocar um endereço nisso ou outra coisa;
     observacoes 		varchar(500) NOT NULL
 );
 
@@ -75,33 +83,32 @@ CREATE TABLE ordensDeProducao(
 );
 
 CREATE TABLE maquinas(
-	pk_idMaquina 		int PRIMARY KEY,
-    nome 				varchar(120) NOT NULL,
-    descricao 			varchar(300) NOT NULL,
-    -- capacidadeMaxima 		ainda nao sei o que colocar aqui
-    ultimaManutencao 	date NOT NULL
+	pk_idMaquina 			int PRIMARY KEY,
+    nome 					varchar(120) NOT NULL,
+    descricao 				varchar(300) NOT NULL,
+    capacidadeMaxima 		varchar(100) NOT NULL,
+    -- unidade 				enum("Grama(s)", "Quilo(s)", "Tonelada(s)"),  // perguntar se isso é uma boa ideia ou não
+    ultimaManutencao 		date NOT NULL
 );
 
 CREATE TABLE operadores(
 	pk_idOperador 		int PRIMARY KEY,
     nome				varchar(120) NOT NULL,
-    especializacao 		varchar(120) NOT NULL
-	-- disponibilidade 		ainda nao sei o que colocar aqui
-    -- historicoDeProducao 		ainda nao sei o que colocar aqui
+    especializacao 		varchar(120) NOT NULL,
+	disponibilidade 	enum("Manhã/Tarde", "Tarde/Noite")
 );
 
 CREATE TABLE equipamentos(
-	pk_idEquipamento int PRIMARY KEY,
-    nome varchar(120) NOT NULL,
-    descricao varchar(300) NOT NULL,
-    dataAquisicao date NOT NULL
-    -- vidaUtilRestante 	ainda nao sei o que colocar aqui
+	pk_idEquipamento 		int PRIMARY KEY,
+    nome 					varchar(120) NOT NULL,
+    descricao 				varchar(300) NOT NULL,
+    dataAquisicao 			date NOT NULL
 );
 
 CREATE TABLE manutencoesProgramadas(
 	pk_idManutencao 	int PRIMARY KEY,
     fk_idEquipamento 	int NOT NULL,
-    -- tipoManutencao 	  ainda nao sei o que colocar aqui
+    tipoManutencao		enum("Preventiva", "Corretiva", "Preditiva", "Prescritiva", "Detectiva", "Produtiva total"),
     dataProgramada 		date NOT NULL,
     responsavel 		varchar(120) NOT NULL
 );
@@ -109,7 +116,7 @@ CREATE TABLE manutencoesProgramadas(
 CREATE TABLE historicoManutencoes(
 	pk_idManutencao 	int PRIMARY KEY,
     fk_idEquipamento 	int NOT NULL,
-    -- tipoManutencao		ainda nao sei o que colocar aqui
+    tipoManutencao		enum("Preventiva", "Corretiva", "Preditiva", "Prescritiva", "Detectiva", "Produtiva total"),
     dataManutencao 		date NOT NULL,
     custosManutencao 	decimal(6,2) NOT NULL
 );
