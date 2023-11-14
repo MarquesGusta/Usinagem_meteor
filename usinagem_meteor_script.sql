@@ -5,13 +5,13 @@ USE usinagem_meteor;
 DROP DATABASE usinagem_meteor;
 
 CREATE TABLE pecas(
-	pk_idPeca 		int PRIMARY KEY,
-    descricao 		varchar(120) NOT NULL,
-    material 		varchar(300) NOT NULL,
-    peso 			decimal(4,2) NOT NULL,
-    dimensoes		varchar(12) NOT NULL,
-    unidade 		enum("mm", "cm", "m", "pol")
-    -- CHECK(dimensoes LIKE"----/----/----")
+	pk_idPeca 			int PRIMARY KEY,
+    descricao 			varchar(120) NOT NULL,
+    material 			varchar(300) NOT NULL,
+    pesoNum 			decimal(4,2) NOT NULL,
+    pesoUnidade			enum("g", "kg", "T"),
+    dimensaoNum			decimal(8,2) NOT NULL,
+    dimensaoUnidade 	enum("mm", "cm", "m", "pol")
 );
 
 CREATE TABLE endereco(
@@ -87,7 +87,6 @@ CREATE TABLE maquinas(
     nome 					varchar(120) NOT NULL,
     descricao 				varchar(300) NOT NULL,
     capacidadeMaxima 		varchar(100) NOT NULL,
-    -- unidade 				enum("Grama(s)", "Quilo(s)", "Tonelada(s)"),  // perguntar se isso é uma boa ideia ou não
     ultimaManutencao 		date NOT NULL
 );
 
