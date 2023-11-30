@@ -20,6 +20,25 @@ WHERE
 	statusOrdem = "Concluído"
 GROUP BY
 	maquinas.nome;
+    
+-- 2.Encontre a quantidade total de peças produzidas por cada máquina.
+SELECT
+	maquinas.nome,
+    SUM(ordem.qtdParaProduzir) AS qtdProduzida
+FROM
+	maquinas
+JOIN
+	historicoProducao AS producao
+ON
+	maquinas.pk_idMaquina = producao.fk_idMaquina
+JOIN
+	ordensDeProducao AS ordem
+ON
+	producao.fk_idOrdem = ordem.pk_idOrdem
+WHERE
+	ordem.statusOrdem = "Concluído"
+GROUP BY
+	maquinas.nome;
 
 -- 3.Liste todas as manutenções programadas para este mês.
 SELECT
@@ -27,7 +46,7 @@ SELECT
 FROM
 	manutencoesProgramadas
 WHERE
-	month(dataProgramada) = 12;
+	year(dataProgramada) = year(curdate()) AND month(dataProgramada) = month(curdate());
 
 -- 4.Encontre os operadores que estiveram envolvidos na produção de uma peça específica.
 SELECT
@@ -129,7 +148,7 @@ SELECT
 FROM
 	inspecoes
 WHERE
-	dataInspecao > curdate() - interval 7 day; -- pode aumentar para 30 dias de intervalo para fim de teste
+	dataInspecao > curdate() - interval 7 day;
 
 -- 13.Encontre  os  operadores  mais  produtivos  com  base  na  quantidade  de peças produzidas.
 SELECT
