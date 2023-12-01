@@ -132,15 +132,18 @@ FROM
 WHERE
 	ultimaManutencao < curdate() - interval 3 month;
 
--- 11.Encontre a média de tempo de produção por tipo de peça. -- falar com o professor
+-- 11.Encontre a média de tempo de produção por tipo de peça.
 SELECT
-	*
+	pecas.descricao,
+    AVG(ABS(DATEDIFF(ordem.dataConclusao, ordem.dataInicio))) AS tempoProducao
 FROM
 	pecas
 JOIN
 	ordensDeProducao AS ordem
 ON
-	pecas.pk_idPeca = ordem.fk_idPeca;
+	pecas.pk_idPeca = ordem.fk_idPeca
+GROUP BY
+	pecas.descricao;
 
 -- 12.Identifique as peças que passaram por inspeção nos últimos sete dias.
 SELECT
@@ -185,15 +188,20 @@ ON
 WHERE
 	dataInicio = "2023-01-23" AND dataConclusao = "2023-06-05";
 
--- 15.Identifique os fornecedores com as entregas mais frequentes de matérias-primas. -- falar com o professor
+-- 15.Identifique os fornecedores com as entregas mais frequentes de matérias-primas.
 SELECT
-	*
+	fornecedores.nome,
+    COUNT(materia.pk_idMateriaPrima) AS entregas
 FROM
 	fornecedores
 JOIN
 	materiasPrimas AS materia
 ON
-	fornecedores.pk_idFornecedor = materia.fk_idFornecedor;
+	fornecedores.pk_idFornecedor = materia.fk_idFornecedor
+GROUP BY
+	fornecedores.nome
+ORDER BY
+	entregas DESC;
 
 -- 16.Encontre o número total de peças produzidas por cada operador.
 SELECT
@@ -243,10 +251,14 @@ WHERE
 GROUP BY
 	dataManutencao;
 
--- 20.Identifique  as  peças  produzidas  com  mais  de  10%  de  rejeições  nos últimos dois meses. -- falar com o professor
+-- 20.Identifique  as  peças  produzidas  com  mais  de  10%  de  rejeições  nos últimos dois meses.
 SELECT
 	*
 FROM
+	inspecoes
+JOIN
 	rejeicoes
-order by
-	fk_idPeca
+ON
+	inspecoes.pk_idInspecao = rejeicoes.fk_idInspecao
+WHERE
+	rejeicoes.fk_idPeca > 0.1 AND rejeicoes.dataRejeicao > curdate() - interval 2 month;
