@@ -6,4 +6,4 @@
 ### *Estruttura do banco* - usinagem_meteor_script
 ### *Inserts* - usinagem_meteor_inserts
 ### *Consultas* - usinagem_meteor_queries
-### \*Diagrama do MySQL* - usinagem_meteor_workbanchModel\
+### *Diagrama do MySQL* - usinagem_meteor_workbanchModel
